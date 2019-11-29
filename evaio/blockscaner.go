@@ -707,6 +707,8 @@ func (bs *EVABlockScanner) extractTransaction(trx *Transaction, result *ExtractR
 					Received:    isReceived,
 					TxType:      0,
 				}
+
+				tx.SetExtParam("memo", trx.Memo)
 				wxID := openwallet.GenTransactionWxID(tx)
 				tx.WxID = wxID
 				extractData.Transaction = tx

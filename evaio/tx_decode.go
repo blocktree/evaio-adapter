@@ -201,7 +201,7 @@ func (decoder *TransactionDecoder) CreateEVARawTransaction(wrapper openwallet.Wa
 	if sequenceChain > int(sequence) {
 		sequence = uint64(sequenceChain)
 	}
-	memo := ""
+	memo := rawTx.GetExtParam().Get("memo").String()
 	messageType := decoder.wm.Config.MsgType
 
 	txFee := evaioTransaction.NewStdFee(int64(gas), evaioTransaction.Coins{evaioTransaction.NewCoin(denom, int64(fee))})
