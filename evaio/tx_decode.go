@@ -73,8 +73,9 @@ func (decoder *TransactionDecoder) SubmitRawTransaction(wrapper openwallet.Walle
 		fmt.Println("Tx to send: ", rawTx.RawHex)
 		return nil, err
 	} else {
-		sequence := gjson.Get(rawTx.RawHex, "tx").Get("signatures").Array()[0].Get("sequence").Uint() + 1
-		wrapper.SetAddressExtParam(gjson.Get(rawTx.RawHex, "tx").Get("msg").Array()[0].Get("value").Get("from_address").String(), decoder.wm.FullName(), sequence)
+		from := gjson.Get(rawTx.RawHex, "tx").Get("msg").Array()[0].Get("value").Get("from_address").String()
+		sequence, _ := wrapper.GetAddressExtParam(from, decoder.wm.FullName())
+		wrapper.SetAddressExtParam(from, decoder.wm.FullName(), ow.NewString(sequence).UInt64() + 1)
 	}
 
 	rawTx.TxID = txid
@@ -201,6 +202,7 @@ func (decoder *TransactionDecoder) CreateEVARawTransaction(wrapper openwallet.Wa
 	if sequenceChain > int(sequence) {
 		sequence = uint64(sequenceChain)
 	}
+	wrapper.SetAddressExtParam(from, decoder.wm.FullName(), sequence)
 	memo := rawTx.GetExtParam().Get("memo").String()
 	messageType := decoder.wm.Config.MsgType
 
