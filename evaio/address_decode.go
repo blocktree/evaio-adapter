@@ -17,46 +17,53 @@ package evaio
 
 import (
 	"github.com/blocktree/go-owcdrivers/addressEncoder"
+	"github.com/blocktree/go-owcdrivers/evaioTransaction"
 	owcrypt "github.com/blocktree/go-owcrypt"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
+
+type AddressDecoderV2 struct {
+
+	openwallet.AddressDecoderV2Base
+	//ScriptPubKeyToBech32Address(scriptPubKey []byte) (string, error)
+}
 type addressDecoder struct {
 	wm *WalletManager //钱包管理者
 }
 
 //NewAddressDecoder 地址解析器
-func NewAddressDecoder(wm *WalletManager) *addressDecoder {
-	decoder := addressDecoder{}
-	decoder.wm = wm
+func NewAddressDecoderV2(wm *WalletManager) *AddressDecoderV2 {
+	decoder := AddressDecoderV2{}
 	return &decoder
 }
 
-//PrivateKeyToWIF 私钥转WIF
-func (decoder *addressDecoder) PrivateKeyToWIF(priv []byte, isTestnet bool) (string, error) {
-	return "", nil
+
+//AddressDecode 地址解析
+func (dec *AddressDecoderV2) AddressDecode(addr string, opts ...interface{}) ([]byte, error) {
+	decodeHash, err := evaioTransaction.Bech32Decode(addr)
+	if err != nil {
+		return nil, err
+	}
+	return decodeHash, nil
 }
 
-//PublicKeyToAddress 公钥转地址
-func (decoder *addressDecoder) PublicKeyToAddress(pub []byte, isTestnet bool) (string, error) {
+//AddressEncode 地址编码
+func (dec *AddressDecoderV2) AddressEncode(hash []byte, opts ...interface{}) (string, error) {
 
 	cfg := addressEncoder.EVA_mainnetAddress
-	if decoder.wm.Config.IsTestNet {
-		cfg = addressEncoder.EVA_testnetAddress
-	}
 
-	pkHash := owcrypt.Hash(pub, 32, owcrypt.HASH_ALG_HASH160)
+	pkHash := owcrypt.Hash(hash, 32, owcrypt.HASH_ALG_HASH160)
 
 	address := addressEncoder.AddressEncode(pkHash, cfg)
 	return address, nil
 }
 
-//RedeemScriptToAddress 多重签名赎回脚本转地址
-func (decoder *addressDecoder) RedeemScriptToAddress(pubs [][]byte, required uint64, isTestnet bool) (string, error) {
-	return "", nil
-}
-
-//WIFToPrivateKey WIF转私钥
-func (decoder *addressDecoder) WIFToPrivateKey(wif string, isTestnet bool) ([]byte, error) {
-	return nil, nil
-
+// AddressVerify 地址校验
+func (dec *AddressDecoderV2) AddressVerify(address string, opts ...interface{}) bool {
+	_, err := evaioTransaction.Bech32Decode(address)
+	if err != nil {
+		return false
+	}
+	return true
 }

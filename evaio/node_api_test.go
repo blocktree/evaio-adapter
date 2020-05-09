@@ -21,7 +21,7 @@ func Test_tmp2(t *testing.T) {
 	}
 }
 func Test_getBlockHeight(t *testing.T) {
-	c := NewClient("http://18.163.89.47:20181", false)
+	c := NewClient("https://stargate.evaio.net", false)
 
 	r, err := c.getBlockHeight()
 
@@ -47,7 +47,7 @@ func Test_getBlockByHash(t *testing.T) {
 }
 
 func Test_getBlockHash(t *testing.T) {
-	c := NewClient("https://stargate.evaio.network", false)
+	c := NewClient("https://stargate.evaio.net", false)
 
 	height := uint64(184952)
 
@@ -65,10 +65,19 @@ func Test_tmp(t *testing.T) {
 	fmt.Println(err)
 	fmt.Println(test.Unix())
 }
+
+
+
+/*
+2020/01/02 10:08:27.995 [I] [manager_test.go:142]  address[ 0 ] : eva1dqhtv85u4haxs73x8nntqttpy62k658hwev5k3 440
+2020/01/02 10:08:27.995 [I] [manager_test.go:142]  address[ 1 ] : eva1ks3qnkq8753stprwvthvppnd57jw20n739ql2k 390
+2020/01/02 10:08:27.995 [I] [manager_test.go:142]  address[ 2 ] : eva1pn80qt83wzk9w4gs3muc8hw26cexlgav75mar0 30
+2020/01/02 10:08:27.995 [I] [manager_test.go:142]  address[ 3 ] : eva1td0y392rcufal8vdl8pa9cjnkxjyzm8qryqwz9 121
+*/
 func Test_getBalance(t *testing.T) {
 	c := NewClient("https://stargate.evaio.net", false)
 
-	address := "eva1pn80qt83wzk9w4gs3muc8hw26cexlgav75mar0"
+	address := "eva17hyme9cqufyqhc7ywzs7v6tv3xg5v5e7fu60u7"
 
 	r, err := c.getBalance(address, "neva")
 
@@ -82,7 +91,7 @@ func Test_getBalance(t *testing.T) {
 
 func Test_getTransaction(t *testing.T) {
 	c := NewClient("https://stargate.evaio.net", false)
-	txid := "23A170E1D868AFED47EE4FB3294335E8B8BECAD048486C54A310EA45EC1ABEBA" //"9KBoALfTjvZLJ6CAuJCGyzRA1aWduiNFMvbqTchfBVpF"
+	txid := "4D1124D32BFB8F724F3570BD02B264F8BA22BB3E0D906DBCFA3E6EBBC7301B41" //"9KBoALfTjvZLJ6CAuJCGyzRA1aWduiNFMvbqTchfBVpF"
 
 	path := "/txs/" + txid
 	r, err := c.Call(path, nil, "GET")
@@ -93,7 +102,7 @@ func Test_getTransaction(t *testing.T) {
 		fmt.Println(r)
 	}
 
-	trx := NewTransaction(r, "auth/StdTx", "cosmos-sdk/MsgSend", "muon")
+	trx := NewTransaction(r, "cosmos-sdk/StdTx", "cosmos-sdk/MsgSend", "neva")
 
 	fmt.Println(trx)
 }
@@ -152,8 +161,8 @@ func Test_getBlockByHeight(t *testing.T) {
 }
 
 func Test_sequence(t *testing.T) {
-	addr := "eva1pn80qt83wzk9w4gs3muc8hw26cexlgav75mar0"
-	c := NewClient("http://47.91.232.118:8888", false)
+	addr := "eva1td0y392rcufal8vdl8pa9cjnkxjyzm8qryqwz9"
+	c := NewClient("https://stargate.evaio.net", false)
 	accountnumber, sequence, err := c.getAccountNumberAndSequence(addr)
 	fmt.Println(err)
 	fmt.Println(accountnumber)

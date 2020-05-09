@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/blocktree/openwallet/hdkeystore"
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/hdkeystore"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 type WalletManager struct {
@@ -34,8 +34,8 @@ type WalletManager struct {
 	//RPCClient       *RpcClient                    // RPC API
 	Config          *WalletConfig                 //钱包管理配置
 	WalletsInSum    map[string]*openwallet.Wallet //参与汇总的钱包
-	Blockscanner    *EVABlockScanner             //区块扫描器
-	Decoder         openwallet.AddressDecoder     //地址编码器
+	Blockscanner    *EVABlockScanner              //区块扫描器
+	Decoder         *AddressDecoderV2     //地址编码器
 	TxDecoder       openwallet.TransactionDecoder //交易单编码器
 	Log             *log.OWLogger                 //日志工具
 	ContractDecoder *ContractDecoder              //智能合约解析器
@@ -50,7 +50,7 @@ func NewWalletManager() *WalletManager {
 	wm.WalletsInSum = make(map[string]*openwallet.Wallet)
 	//区块扫描器
 	wm.Blockscanner = NewEVABlockScanner(&wm)
-	wm.Decoder = NewAddressDecoder(&wm)
+	wm.Decoder = NewAddressDecoderV2(&wm)
 	wm.TxDecoder = NewTransactionDecoder(&wm)
 	wm.Log = log.NewOWLogger(wm.Symbol())
 	wm.ContractDecoder = NewContractDecoder(&wm)
@@ -108,6 +108,5 @@ func (wm *WalletManager) sendRawTransactionByNode(txHex string) (string, error) 
 		return "", err
 	}
 
-	
 	return txid, nil
 }

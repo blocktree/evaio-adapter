@@ -20,10 +20,10 @@ import (
 	"testing"
 
 	"github.com/blocktree/evaio-adapter/evaio"
-	"github.com/blocktree/openwallet/openw"
+	"github.com/blocktree/openwallet/v2/openw"
 
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 )
 
 func testGetAssetsAccountBalance(tm *openw.WalletManager, walletID, accountID string) {
@@ -123,34 +123,35 @@ func testSubmitTransactionStep(tm *openw.WalletManager, rawTx *openwallet.RawTra
 func TestTransfer(t *testing.T) {
 	tm := testInitWalletManager()
 	walletID := "W6oBg6JSaoEMs46u2tfWh4rreu2Dwt8Cf6"
-	accountID := "E1Yea5xyvHk4EUcyex3aNkgPSpAs8R3mSjNC23qeqj4r"
-	to := "eva1dqhtv85u4haxs73x8nntqttpy62k658hwev5k3"
+	//accountID := "E1Yea5xyvHk4EUcyex3aNkgPSpAs8R3mSjNC23qeqj4r"
+	accountID := "6Sasy5wG4bHt4KbrVeevsRmk3BrmZvMR9u9ogUtgzL4Z"
+	to := "eva18jg8gs9mc2gguwcw73csm03amqkspk6nhmr0qr"
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 
-	//for index := 0; index < 18; index++ {
+	//for index := 0; index < 4; index++ {
 
-		rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "20", "", nil)
-		if err != nil {
-			return
-		}
+	rawTx, err := testCreateTransactionStep(tm, walletID, accountID, to, "20", "", nil)
+	if err != nil {
+		return
+	}
 
-		log.Std.Info("rawTx: %+v", rawTx)
+	log.Std.Info("rawTx: %+v", rawTx)
 
-		_, err = testSignTransactionStep(tm, rawTx)
-		if err != nil {
-			return
-		}
+	_, err = testSignTransactionStep(tm, rawTx)
+	if err != nil {
+		return
+	}
 
-		_, err = testVerifyTransactionStep(tm, rawTx)
-		if err != nil {
-			return
-		}
+	_, err = testVerifyTransactionStep(tm, rawTx)
+	if err != nil {
+		return
+	}
 
-		_, err = testSubmitTransactionStep(tm, rawTx)
-		if err != nil {
-			return
-		}
+	_, err = testSubmitTransactionStep(tm, rawTx)
+	if err != nil {
+		return
+	}
 	//}
 	// rawTx, err = testCreateTransactionStep(tm, walletID, accountID, to, "0.02", "", nil)
 	// if err != nil {
@@ -241,9 +242,9 @@ func getdata(addr string) {
 
 func TestSummary(t *testing.T) {
 	tm := testInitWalletManager()
-	walletID := "WCPa2UFFUt5HAXPHbzwWty5x3NJpEeBRHY"
-	accountID := "8WivbG5nnxGEn9kruuWa7NKQWWSyzjTuUhZMJaExC5Pq"
-	summaryAddress := "evaio1xv66sa5tlplm68j4fec6stdzszg3pcvswag06j"
+	walletID := "W6oBg6JSaoEMs46u2tfWh4rreu2Dwt8Cf6"
+	accountID := "E1Yea5xyvHk4EUcyex3aNkgPSpAs8R3mSjNC23qeqj4r"
+	summaryAddress := "eva17hyme9cqufyqhc7ywzs7v6tv3xg5v5e7fu60u7"
 
 	testGetAssetsAccountBalance(tm, walletID, accountID)
 

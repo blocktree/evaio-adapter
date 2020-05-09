@@ -26,9 +26,9 @@ import (
 
 	"github.com/blocktree/go-owcdrivers/evaioTransaction"
 	owcrypt "github.com/blocktree/go-owcrypt"
-	ow "github.com/blocktree/openwallet/common"
-	"github.com/blocktree/openwallet/log"
-	"github.com/blocktree/openwallet/openwallet"
+	ow "github.com/blocktree/openwallet/v2/common"
+	"github.com/blocktree/openwallet/v2/log"
+	"github.com/blocktree/openwallet/v2/openwallet"
 	"github.com/tidwall/gjson"
 )
 
@@ -75,7 +75,7 @@ func (decoder *TransactionDecoder) SubmitRawTransaction(wrapper openwallet.Walle
 	} else {
 		from := gjson.Get(rawTx.RawHex, "tx").Get("msg").Array()[0].Get("value").Get("from_address").String()
 		sequence, _ := wrapper.GetAddressExtParam(from, decoder.wm.FullName())
-		wrapper.SetAddressExtParam(from, decoder.wm.FullName(), ow.NewString(sequence).UInt64() + 1)
+		wrapper.SetAddressExtParam(from, decoder.wm.FullName(), ow.NewString(sequence).UInt64()+1)
 	}
 
 	rawTx.TxID = txid
@@ -314,7 +314,7 @@ func (decoder *TransactionDecoder) VerifyEVARawTransaction(wrapper openwallet.Wa
 	var txStruct evaioTransaction.TxStruct
 	json.Unmarshal([]byte(emptyTrans), &txStruct)
 	keyType := "tendermint/PubKeySecp256k1"
-	snedmode := "sync"//"block"
+	snedmode := "sync" //"block"
 	signedTrans, err := txStruct.CreateJsonForSend(signature, pubkey, keyType, snedmode)
 
 	if err != nil {
