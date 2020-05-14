@@ -16,6 +16,7 @@
 package evaio
 
 import (
+	"fmt"
 	"github.com/blocktree/go-owcdrivers/addressEncoder"
 	"github.com/blocktree/go-owcdrivers/evaioTransaction"
 	owcrypt "github.com/blocktree/go-owcrypt"
@@ -66,4 +67,41 @@ func (dec *AddressDecoderV2) AddressVerify(address string, opts ...interface{}) 
 		return false
 	}
 	return true
+}
+
+
+//PrivateKeyToWIF 私钥转WIF
+func (dec *AddressDecoderV2) PrivateKeyToWIF(priv []byte, isTestnet bool) (string, error) {
+	return "", fmt.Errorf("PrivateKeyToWIF not implement")
+}
+
+//PublicKeyToAddress 公钥转地址
+func (dec *AddressDecoderV2) PublicKeyToAddress(pub []byte, isTestnet bool) (string, error) {
+
+	cfg := addressEncoder.EVA_mainnetAddress
+
+	pkHash := owcrypt.Hash(pub, 32, owcrypt.HASH_ALG_HASH160)
+
+	address := addressEncoder.AddressEncode(pkHash, cfg)
+	return address, nil
+}
+
+//WIFToPrivateKey WIF转私钥
+func (dec *AddressDecoderV2) WIFToPrivateKey(wif string, isTestnet bool) ([]byte, error) {
+	return nil, fmt.Errorf("WIFToPrivateKey not implement")
+}
+
+//RedeemScriptToAddress 多重签名赎回脚本转地址
+func (dec *AddressDecoderV2) RedeemScriptToAddress(pubs [][]byte, required uint64, isTestnet bool) (string, error) {
+	return "", fmt.Errorf("RedeemScriptToAddress not implement")
+}
+
+// CustomCreateAddress 创建账户地址
+func (dec *AddressDecoderV2) CustomCreateAddress(account *openwallet.AssetsAccount, newIndex uint64) (*openwallet.Address, error) {
+	return nil, fmt.Errorf("CreateAddressByAccount not implement")
+}
+
+// SupportCustomCreateAddressFunction 支持创建地址实现
+func (dec *AddressDecoderV2) SupportCustomCreateAddressFunction() bool {
+	return false
 }
